@@ -1,39 +1,34 @@
 $checkbox-width: 1rem;
 $checkbox-height: 2rem;
 $checkbox-border: 0.3125rem;
-$check-success-scale: calc(0.3125 / 2);
+$check-success-scale: calc($checkbox-border / $checkbox-height);
 $robot-check-dismiss-animation-time: 200ms;
 $circle-scale-in-animation-time: 200ms;
 $cricle-fill-animation-time: 1s;
 $circle-scale-out-animation-time: 200ms;
 $checkbox-animation-time: 150ms;
-$checkmark-border-color: #81c038;
+$checkmark-border: $checkbox-border solid #81c038;
+$checkbox-size: 2rem;
 
-.container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  margin-top: 3rem;
-}
-
-.inner {
+.checkmark {
   position: absolute;
+  // TODO: probably translate and top should be calculated based on the rotation and transform origin
   translate: -0.25rem;
-  top: -2rem;
+  top: -2rem; 
+
   /* inner and inverter move by the padding if specified, needs to be 0 to stay static */
-  padding-left: 0;
-  padding-bottom: 0;
-  /* directly switches to final state if not specified */
-  overflow: hidden;
+  // padding-left: 0;
+  // padding-bottom: 0;
+
+  overflow: hidden; /* directly switches to final state if not specified */
   transform-origin: 0 100%;
   transform: scale(0, $check-success-scale);
   rotate: 45deg;
 }
 
-.inner-inverter {
-  border-bottom: $checkbox-border solid $checkmark-border-color;
-  border-right: $checkbox-border solid $checkmark-border-color;
+.checkmark-inverter {
+  border-bottom: $checkmark-border;
+  border-right: $checkmark-border;
   transform-origin: 0 100%;
   width: $checkbox-width;
   height: $checkbox-height;
@@ -45,46 +40,44 @@ $verified-width-delay: $robot-check-dismiss-animation-time +
   $circle-scale-out-animation-time;
 $verified-height-delay: $verified-width-delay + $checkbox-animation-time;
 
-.inner-checked {
+.checkmark-checked {
   animation: $checkbox-animation-time $verified-width-delay
       checkedWidthAnimation linear forwards,
     $checkbox-animation-time $verified-height-delay checkedHeightAnimation
       linear forwards;
 }
 
-.inner-inverter-checked {
+.checkmark-inverter-checked {
   animation: $checkbox-animation-time $verified-width-delay
       checkedWidthReversedAnimation linear forwards,
     $checkbox-animation-time $verified-height-delay
       checkedHeightReversedAnimation linear forwards;
 }
 
-.toggle-btn {
-  position: absolute;
-  left: 10px;
-  top: 200px;
-}
-
 /* Checkbox */
 .robot-check {
-  display: block;
+  display: flex;
+  align-items: center;
   position: absolute;
-  /* make space for our custom checkbox on the left */
   cursor: pointer;
   user-select: none;
 
-  .checkmark {
-    display: grid;
-    place-items: center;
-    height: 1.5rem;
-    width: 1.5rem;
+  .checkbox {
+    width: $checkbox-size;
+    height: $checkbox-size;
     background-color: #fff;
     border: 2px solid #c1c1c1;
   }
 
-  &.checked .checkmark {
+  &.checked .checkbox {
     animation: robot-check-dismiss $robot-check-dismiss-animation-time ease-in
       forwards;
+  }
+
+  .robot-check-text {
+    position: absolute;
+    left: 2.5rem;
+    width: max-content;
   }
 
   input {
@@ -94,13 +87,6 @@ $verified-height-delay: $verified-width-delay + $checkbox-animation-time;
     height: 0;
     width: 0;
   }
-
-  .robot-check-text {
-    position: absolute;
-    left: 2.5rem;
-    width: max-content;
-  }
-
   @keyframes robot-check-dismiss {
     100% {
       scale: 0;
@@ -108,17 +94,16 @@ $verified-height-delay: $verified-width-delay + $checkbox-animation-time;
   }
 }
 
-/* Circle fill */
-
-.svg-success {
+/* Loading circle */
+.captcha-loading-circle {
   display: inline-block;
-  height: 2rem;
-  width: 2rem;
-  overflow: visible;
+  width: $checkbox-size;
+  height: $checkbox-size;
+  overflow: visible; /* otherwise circle gets clipped */
   position: absolute;
   scale: 0;
 
-  .success-circle-background {
+  .circle-outline {
     fill: none;
     stroke-width: 5px;
     stroke: #c1c1c1;
@@ -127,7 +112,7 @@ $verified-height-delay: $verified-width-delay + $checkbox-animation-time;
     z-index: -1;
   }
 
-  .success-circle-outline {
+  .circle-progress-outline {
     fill: none;
     stroke-width: 5px;
     stroke: hsl(198, 100%, 34%);
@@ -136,14 +121,14 @@ $verified-height-delay: $verified-width-delay + $checkbox-animation-time;
     opacity: 0;
   }
 
-  &.checked .success-circle-outline {
-    animation: success-circle-outline $cricle-fill-animation-time ease-in-out
+  &.checked .circle-progress-outline {
+    animation: circle-progress $cricle-fill-animation-time ease-in-out
       $robot-check-dismiss-animation-time + $circle-scale-in-animation-time
       forwards;
   }
 
-  .success-circle-fill {
-    fill: #fff;
+  .circle-fill {
+    fill: var(--clr-captcha-bg);
     stroke: none;
   }
 
@@ -161,7 +146,7 @@ $verified-height-delay: $verified-width-delay + $checkbox-animation-time;
     }
   }
 
-  @keyframes success-circle-outline {
+  @keyframes circle-progress {
     0% {
       stroke-dashoffset: 72px;
       opacity: 1;

@@ -13,6 +13,7 @@
   --clr-neutral-300: #a9afbc;
   --clr-neutral-400: #737b8c;
   --clr-neutral-900: #020203;
+  --clr-captcha-bg: #f9f9f9;
 }
 
 /* Resets */
@@ -83,15 +84,14 @@ body {
       1rem,
       1fr
     );
-  grid-template-areas: ". main .";
   overflow: auto;
   padding: 5em 0;
 
   .form-panel-inner {
-    grid-area: main;
+    grid-column: 2 / 3;
   }
 
-  label {
+  label:not(.robot-check) {
     display: block;
   }
 
@@ -128,15 +128,6 @@ body {
 
       > * {
         left: 0.25rem;
-      }
-
-      .robot-check {
-        display: flex;
-        align-items: center;
-        .checkmark {
-          position: relative;
-          //left: 0.25rem;
-        }
       }
     }
 

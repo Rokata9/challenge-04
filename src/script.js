@@ -1,21 +1,16 @@
 "use strict";
 
+// More info about implementation: https://developer.chrome.com/blog/performant-expand-and-collapse
 class Expando {
+  // $check-success-scale from _captcha.scss, some custom props like $checkbox-border and $checkbox-height can be moved to inline styles in html and retrieved by both CSS and JS
   _heightScale = 0.15625;
+  _scale = 1;
 
   constructor() {
-    this._elInner = document.querySelector(".inner");
-    this._elInnerInverter = document.querySelector(".inner-inverter");
-    this._toggleBtn = document.querySelector(".toggle-btn");
+    this._elCheckmark = document.querySelector(".checkmark");
+    this._elCheckmarkInverter = document.querySelector(".checkmark-inverter");
 
-    this.toggle = this.toggle.bind(this);
-    this.expand = this.expand.bind(this);
-    this.collapse = this.collapse.bind(this);
-
-    this._calculate();
     this._createEaseAnimations();
-
-    //this._toggleBtn.addEventListener("click", this.toggle);
   }
 
   expand() {
@@ -43,18 +38,14 @@ class Expando {
   }
 
   _applyAnimation() {
-    this._elInner.classList.remove("inner-checked");
-    this._elInner.classList.remove("inner-inverter-checked");
+    // this._elCheckmark.classList.remove("checkmark-checked");
+    // this._elCheckmark.classList.remove("checkmark-inverter-checked");
 
     // Force a recalc styles here so the classes take hold.
-    window.getComputedStyle(this._elInner).transform;
+    // window.getComputedStyle(this._elCheckmark).transform;
 
-    this._elInner.classList.add("inner-checked");
-    this._elInnerInverter.classList.add("inner-inverter-checked");
-  }
-
-  _calculate() {
-    this._scale = 1;
+    this._elCheckmark.classList.add("checkmark-checked");
+    this._elCheckmarkInverter.classList.add("checkmark-inverter-checked");
   }
 
   _createEaseAnimations() {
@@ -113,10 +104,6 @@ class Expando {
         ${heightAnimationReversed.join("")}
       }`;
 
-    console.log(widthAnimation.join(""));
-    console.log('-------');
-    console.log(widthAnimationReversed.join(""));
-
     document.head.appendChild(ease);
     return ease;
   }
@@ -151,9 +138,8 @@ class Expando {
 }
 
 const expando = new Expando();
-
 const robotCheck = document.querySelector('.robot-check');
-const circle = document.querySelector('.svg-success');
+const circle = document.querySelector('.captcha-loading-circle');
 
 robotCheck.addEventListener('click', () => {
   robotCheck.classList.add('checked');
