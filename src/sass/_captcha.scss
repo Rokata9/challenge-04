@@ -1,0 +1,175 @@
+$checkbox-width: 1rem;
+$checkbox-height: 2rem;
+$checkbox-border: 0.3125rem;
+$check-success-scale: calc(0.3125 / 2);
+$robot-check-dismiss-animation-time: 200ms;
+$circle-scale-in-animation-time: 200ms;
+$cricle-fill-animation-time: 1s;
+$circle-scale-out-animation-time: 200ms;
+$checkbox-animation-time: 150ms;
+$checkmark-border-color: #81c038;
+
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  margin-top: 3rem;
+}
+
+.inner {
+  position: absolute;
+  translate: -0.25rem;
+  top: -2rem;
+  /* inner and inverter move by the padding if specified, needs to be 0 to stay static */
+  padding-left: 0;
+  padding-bottom: 0;
+  /* directly switches to final state if not specified */
+  overflow: hidden;
+  transform-origin: 0 100%;
+  transform: scale(0, $check-success-scale);
+  rotate: 45deg;
+}
+
+.inner-inverter {
+  border-bottom: $checkbox-border solid $checkmark-border-color;
+  border-right: $checkbox-border solid $checkmark-border-color;
+  transform-origin: 0 100%;
+  width: $checkbox-width;
+  height: $checkbox-height;
+  transform: scale(0, $check-success-scale);
+}
+
+$verified-width-delay: $robot-check-dismiss-animation-time +
+  $circle-scale-in-animation-time + $cricle-fill-animation-time +
+  $circle-scale-out-animation-time;
+$verified-height-delay: $verified-width-delay + $checkbox-animation-time;
+
+.inner-checked {
+  animation: $checkbox-animation-time $verified-width-delay
+      checkedWidthAnimation linear forwards,
+    $checkbox-animation-time $verified-height-delay checkedHeightAnimation
+      linear forwards;
+}
+
+.inner-inverter-checked {
+  animation: $checkbox-animation-time $verified-width-delay
+      checkedWidthReversedAnimation linear forwards,
+    $checkbox-animation-time $verified-height-delay
+      checkedHeightReversedAnimation linear forwards;
+}
+
+.toggle-btn {
+  position: absolute;
+  left: 10px;
+  top: 200px;
+}
+
+/* Checkbox */
+.robot-check {
+  display: block;
+  position: absolute;
+  /* make space for our custom checkbox on the left */
+  cursor: pointer;
+  user-select: none;
+
+  .checkmark {
+    display: grid;
+    place-items: center;
+    height: 1.5rem;
+    width: 1.5rem;
+    background-color: #fff;
+    border: 2px solid #c1c1c1;
+  }
+
+  &.checked .checkmark {
+    animation: robot-check-dismiss $robot-check-dismiss-animation-time ease-in
+      forwards;
+  }
+
+  input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+  }
+
+  .robot-check-text {
+    position: absolute;
+    left: 2.5rem;
+    width: max-content;
+  }
+
+  @keyframes robot-check-dismiss {
+    100% {
+      scale: 0;
+    }
+  }
+}
+
+/* Circle fill */
+
+.svg-success {
+  display: inline-block;
+  height: 2rem;
+  width: 2rem;
+  overflow: visible;
+  position: absolute;
+  scale: 0;
+
+  .success-circle-background {
+    fill: none;
+    stroke-width: 5px;
+    stroke: #c1c1c1;
+    stroke-dasharray: 72px, 72px;
+    stroke-dashoffset: 0;
+    z-index: -1;
+  }
+
+  .success-circle-outline {
+    fill: none;
+    stroke-width: 5px;
+    stroke: hsl(198, 100%, 34%);
+    stroke-dasharray: 72px, 72px;
+    stroke-dashoffset: 72px;
+    opacity: 0;
+  }
+
+  &.checked .success-circle-outline {
+    animation: success-circle-outline $cricle-fill-animation-time ease-in-out
+      $robot-check-dismiss-animation-time + $circle-scale-in-animation-time
+      forwards;
+  }
+
+  .success-circle-fill {
+    fill: #fff;
+    stroke: none;
+  }
+
+  &.checked {
+    animation: circle-scale $circle-scale-in-animation-time
+        $robot-check-dismiss-animation-time ease forwards,
+      robot-check-dismiss $circle-scale-out-animation-time ease-in forwards
+        $robot-check-dismiss-animation-time + $circle-scale-in-animation-time +
+        $cricle-fill-animation-time;
+  }
+
+  @keyframes circle-scale {
+    100% {
+      scale: 1;
+    }
+  }
+
+  @keyframes success-circle-outline {
+    0% {
+      stroke-dashoffset: 72px;
+      opacity: 1;
+    }
+
+    100% {
+      stroke-dashoffset: 0px;
+      opacity: 1;
+    }
+  }
+}
