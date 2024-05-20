@@ -22,7 +22,7 @@ $checkbox-size: 2rem;
 
   overflow: hidden; /* directly switches to final state if not specified */
   transform-origin: 0 100%;
-  transform: scale(0, $check-success-scale);
+  // transform: scale(0, $check-success-scale);
   rotate: 45deg;
 }
 
