@@ -13,7 +13,7 @@ $checkbox-size: 2rem;
 .checkmark {
   position: absolute;
   // TODO: probably translate and top should be calculated based on the rotation and transform origin
-  translate: -0.25rem;
+  // translate: -0.25rem;
   top: -2rem; 
 
   /* inner and inverter move by the padding if specified, needs to be 0 to stay static */
