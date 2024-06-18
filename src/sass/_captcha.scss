@@ -61,6 +61,7 @@ $verified-height-delay: $verified-width-delay + $checkbox-animation-time;
   position: absolute;
   cursor: pointer;
   user-select: none;
+  z-index: 11;
 
   .checkbox {
     width: $checkbox-size;
