@@ -32,6 +32,8 @@ $checkbox-size: 2rem;
   transform-origin: 0 100%;
   width: $checkbox-width;
   height: $checkbox-height;
+
+  // has to be on child element as if put on parent, child would shrink together with it
   transform: scale(0, $check-success-scale);
 }
 
